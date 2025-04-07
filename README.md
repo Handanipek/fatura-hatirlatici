@@ -3,6 +3,17 @@
 Bu Flutter uygulaması, kullanıcıların fatura takibini kolaylaştırmak ve zamanında ödeme yapmalarını sağlamak amacıyla geliştirilmiştir. Kullanıcılar, giriş/kayıt işlemlerini gerçekleştirdikten sonra fatura bilgilerini ekleyebilir, ödeme durumlarını takip edebilir ve istatistiklerle analiz yapabilirler.
 
 ---
+## 🧭 Sayfaların Görevleri ve İçerikleri
+
+| Sayfa | Görevi |
+|-------|--------|
+| `LoginScreen` | Kullanıcı adı ve şifre ile giriş yapılır |
+| `RegisterScreen` | Yeni kullanıcı kayıt işlemleri yapılır |
+| `HomeScreen` | Faturaların listelendiği, silindiği ve durumunun güncellendiği ana sayfa |
+| `AddBillScreen` | Yeni fatura ekleme sayfası |
+| `StatisticsScreen` | Aylık fatura grafikleri, ödeme durumu dağılımı ve en yüksek fatura analizi |
+
+---
 
 ## 🚀 Özellikler
 
@@ -15,7 +26,23 @@ Bu Flutter uygulaması, kullanıcıların fatura takibini kolaylaştırmak ve za
 - 🗃️ Hive ile Lokal Veri Saklama
 
 ---
+## 🔐 Giriş Bilgileri Nasıl Saklanıyor?
 
+- Kullanıcı kayıt bilgileri Hive veritabanında (`users` kutusu) saklanmaktadır.
+- Giriş yapıldığında `auth` adlı Hive kutusuna kullanıcı ID’si kaydedilir.
+- Uygulama her açıldığında `auth` kutusu kontrol edilerek oturum devam ettirilir.
+
+---
+
+## 🧩 Diğer Anlatmak İstediklerim
+
+- Proje %100 Flutter ile yazılmıştır.
+- Tüm veriler lokal olarak Hive ile saklanır, internet bağlantısı gerektirmez.
+- Uygulama sade, modern ve kullanıcı dostu bir arayüze sahiptir.
+- Grafikler için `fl_chart` paketi kullanılmıştır.
+- Uygulamanın launcher ikonu ve splash ekranı özelleştirilmiştir.
+
+---
 ### 🔐 Giriş Ekranı
 ![Login](assets/login.png)
 
@@ -71,6 +98,7 @@ Bu Flutter uygulaması, kullanıcıların fatura takibini kolaylaştırmak ve za
 
 ## 👥 Katkıda Bulunanlar
 
-- Handan İpek
-- Betül Zeybek
----
+| Üye Adı      | Görevleri                                                                                                       |
+|--------------|------------------------------------------------------------------------------------------------------------------|
+| Handan İpek  | Proje fikri geliştirme, tüm sayfaların tasarımı ve kodlaması, login/kayıt sistemi, Hive veri yönetimi, grafik ekranı, kullanıcı kontrolü, splash/icon tasarımı, README oluşturma |
+| Betül Zeybek | Sayfa bağlantıları ve yönlendirmeler, drawer menü ve ikon ayarları, bildirim entegrasyonu, fatura ekleme/silme testleri, kullanıcı deneyimi geri bildirimleri |
