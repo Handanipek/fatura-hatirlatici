@@ -23,7 +23,7 @@ Bu Flutter uygulaması, kullanıcıların fatura takibini kolaylaştırmak ve za
 ![Home](assets/home.png)
 
 ### 📊 İstatistikler
-![Statistics](assets/statistics.png)
+![Statistics](assets/statistic.png)
 
 ### 📊 Fatura EKleme EKranı
 ![Add_Bill](assets/add_bill.png)
