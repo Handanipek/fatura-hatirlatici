@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:collection/collection.dart';
-import '../models/user.dart';
+import 'package:provider/provider.dart';
+import '../providers/user_provider.dart';
 import 'home_screen.dart';
+import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,154 +12,127 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+  String? _error;
 
-  void _registerUser() async {
-    final name = _nameController.text.trim();
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
+  void _register() async {
+    if (!_formKey.currentState!.validate()) return;
 
-    if (name.isEmpty || email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lütfen tüm alanları doldurun.')),
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      await Provider.of<UserProvider>(context, listen: false).register(
+        _usernameController.text.trim(),
+        _passwordController.text.trim(),
       );
-      return;
-    }
-
-    final usersBox = Hive.box<User>('users');
-    User? existingUser = usersBox.values.firstWhereOrNull(
-          (u) => u.email == email,
-    );
-
-    if (existingUser != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Bu e-posta ile kayıtlı kullanıcı zaten var.')),
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+            (route) => false,
       );
-      return;
+    } catch (e) {
+      setState(() => _error = e.toString().replaceAll('Exception:', '').trim());
+    } finally {
+      setState(() => _isLoading = false);
     }
-
-    final newUser = User(name: name, email: email, password: password);
-    await usersBox.add(newUser);
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFEAF4F2),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
+          child: Form(
+            key: _formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Başlık
+                const Icon(Icons.person_add_alt_1_outlined, size: 64, color: Color(0xFF4C9F70)),
+                const SizedBox(height: 16),
                 const Text(
-                  'Hesap Oluştur',
+                  'Kayıt Ol',
                   style: TextStyle(
-                    fontSize: 32,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF4C9F70), // soft yeşil
+                    color: Color(0xFF4C9F70),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 32),
 
-                // İsim
-                TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    hintText: 'İsim',
-                    prefixIcon: const Icon(Icons.person),
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: _inputDecoration('Kullanıcı Adı'),
+                  validator: (value) =>
+                  value!.isEmpty ? 'Kullanıcı adı giriniz' : null,
                 ),
                 const SizedBox(height: 16),
-
-                // Email
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    hintText: 'E-posta',
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Şifre
-                TextField(
+                TextFormField(
                   controller: _passwordController,
+                  decoration: _inputDecoration('Şifre'),
                   obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Şifre',
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
+                  validator: (value) =>
+                  value!.isEmpty ? 'Şifre giriniz' : null,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
-                // Kayıt Ol Butonu
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _registerUser,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4C9F70),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                    child: const Text(
-                      'Kayıt Ol',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
+                if (_error != null)
+                  Text(
+                    _error!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _register,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                    backgroundColor: const Color(0xFF4C9F70),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text('Kayıt Ol', style: TextStyle(fontSize: 16)),
                 ),
 
                 const SizedBox(height: 16),
-
-                // Giriş yap linki
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => const LoginScreen()),
+                    );
+                  },
                   child: const Text(
-                    'Zaten hesabınız var mı? Giriş Yap',
-                    style: TextStyle(
-                      color: Color(0xFF4C9F70),
-                      fontWeight: FontWeight.w500,
-                    ),
+                    'Zaten hesabınız var mı? Giriş yapın',
+                    style: TextStyle(color: Colors.black54),
                   ),
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Color(0xFF4C9F70)),
+        borderRadius: BorderRadius.circular(12),
       ),
     );
   }

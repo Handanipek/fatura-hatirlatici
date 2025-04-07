@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/bill_provider.dart';
+import '../providers/user_provider.dart';
 
 class AddBillScreen extends StatefulWidget {
   const AddBillScreen({super.key});
@@ -18,22 +20,31 @@ class _AddBillScreenState extends State<AddBillScreen> {
   void _submit() {
     if (!_formKey.currentState!.validate() || _selectedDate == null) return;
 
-    final title = _titleController.text;
-    final amount = double.tryParse(_amountController.text) ?? 0;
+    final user = Provider.of<UserProvider>(context, listen: false).currentUser;
+    if (user == null) return;
 
-    Provider.of<BillProvider>(context, listen: false)
-        .addBill(title, amount, _selectedDate!);
+    final title = _titleController.text.trim();
+    final amount = double.tryParse(_amountController.text.trim()) ?? 0;
+
+    Provider.of<BillProvider>(context, listen: false).addBill(
+      title,
+      amount,
+      _selectedDate!,
+      user.id, // ✅ kullanıcıya özel ekleme
+    );
 
     Navigator.of(context).pop();
   }
 
   void _pickDate() async {
+    final now = DateTime.now();
     final picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2023),
-      lastDate: DateTime(2100),
+      initialDate: now,
+      firstDate: now,
+      lastDate: DateTime(now.year + 5),
     );
+
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
@@ -44,91 +55,55 @@ class _AddBillScreenState extends State<AddBillScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEAF4F2), // soft arka plan
       appBar: AppBar(
-        backgroundColor: const Color(0xFF4C9F70), // yeşil başlık
         title: const Text('Yeni Fatura Ekle'),
-        centerTitle: true,
-        foregroundColor: Colors.white,
+        backgroundColor: const Color(0xFF4C9F70),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
             children: [
               TextFormField(
                 controller: _titleController,
-                decoration: InputDecoration(
-                  hintText: 'Fatura Başlığı',
-                  prefixIcon: const Icon(Icons.text_fields),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+                decoration: const InputDecoration(labelText: 'Fatura Başlığı'),
                 validator: (value) =>
-                value!.isEmpty ? 'Boş bırakılamaz' : null,
+                value!.isEmpty ? 'Başlık giriniz' : null,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: _amountController,
-                decoration: InputDecoration(
-                  hintText: 'Tutar (₺)',
-                  prefixIcon: const Icon(Icons.money),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+                decoration:
+                const InputDecoration(labelText: 'Tutar (₺)'),
                 keyboardType: TextInputType.number,
                 validator: (value) =>
-                value!.isEmpty ? 'Boş bırakılamaz' : null,
+                value!.isEmpty ? 'Tutar giriniz' : null,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
                     child: Text(
                       _selectedDate == null
                           ? 'Tarih seçilmedi'
-                          : 'Seçilen: ${_selectedDate!.toLocal().toString().split(' ')[0]}',
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                          : 'Son tarih: ${_selectedDate!.toLocal()}'.split(' ')[0],
                     ),
                   ),
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFF4C9F70),
-                    ),
+                  TextButton(
                     onPressed: _pickDate,
-                    icon: const Icon(Icons.date_range),
-                    label: const Text('Tarih Seç'),
-                  ),
+                    child: const Text('Tarih Seç'),
+                  )
                 ],
               ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4C9F70),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  onPressed: _submit,
-                  child: const Text(
-                    'Kaydet',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _submit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF4C9F70),
+                  foregroundColor: Colors.white,
                 ),
+                child: const Text('Fatura Ekle'),
               ),
             ],
           ),

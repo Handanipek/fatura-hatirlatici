@@ -19,11 +19,15 @@ class Bill extends HiveObject {
   @HiveField(4)
   bool isPaid;
 
+  @HiveField(5)
+  String userId; // ✅ Yeni alan: faturayı kimin eklediğini tutar
+
   Bill({
     required this.id,
     required this.title,
     required this.amount,
     required this.dueDate,
     this.isPaid = false,
+    required this.userId,
   });
 }

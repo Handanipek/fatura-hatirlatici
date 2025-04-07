@@ -3,19 +3,19 @@ import 'package:hive/hive.dart';
 part 'user.g.dart';
 
 @HiveType(typeId: 1)
-class User extends HiveObject {
+class AppUser {
   @HiveField(0)
-  String name;
+  final String id;
 
   @HiveField(1)
-  String email;
+  final String username;
 
   @HiveField(2)
-  String password;
+  final String password;
 
-  User({
-    required this.name,
-    required this.email,
+  AppUser({
+    required this.id,
+    required this.username,
     required this.password,
   });
 }

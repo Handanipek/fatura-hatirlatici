@@ -6,31 +6,31 @@ part of 'user.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserAdapter extends TypeAdapter<User> {
+class AppUserAdapter extends TypeAdapter<AppUser> {
   @override
   final int typeId = 1;
 
   @override
-  User read(BinaryReader reader) {
+  AppUser read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return User(
-      name: fields[0] as String,
-      email: fields[1] as String,
+    return AppUser(
+      id: fields[0] as String,
+      username: fields[1] as String,
       password: fields[2] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, User obj) {
+  void write(BinaryWriter writer, AppUser obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.email)
+      ..write(obj.username)
       ..writeByte(2)
       ..write(obj.password);
   }
@@ -41,7 +41,7 @@ class UserAdapter extends TypeAdapter<User> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserAdapter &&
+      other is AppUserAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
