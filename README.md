@@ -1,31 +1,95 @@
 # 📱 Fatura Hatırlatıcı Uygulaması
 
-Bu Flutter uygulaması, kullanıcıların fatura takibini kolaylaştırmak ve zamanında ödeme yapmalarını sağlamak amacıyla geliştirilmiştir. Kullanıcılar, giriş/kayıt işlemlerini gerçekleştirdikten sonra fatura bilgilerini ekleyebilir, ödeme durumlarını takip edebilir ve istatistiklerle analiz yapabilirler.
-
+Bu Flutter uygulaması, kullanıcıların fatura takibini kolaylaştırmak, faturalarını düzenli ve zamanında ödemelerini sağlamak amacıyla geliştirilmiştir. Kullanıcılar, kayıt ve giriş işlemlerini gerçekleştirdikten sonra, faturalarını ekleyebilir, ödeme durumlarını takip edebilir, takvim ve grafiklerle analiz yapabilirler.
 ---
 ## 🧭 Sayfaların Görevleri ve İçerikleri
 
-| Sayfa | Görevi |
-|-------|--------|
-| `LoginScreen` | Kullanıcı adı ve şifre ile giriş yapılır |
-| `RegisterScreen` | Yeni kullanıcı kayıt işlemleri yapılır |
-| `HomeScreen` | Faturaların listelendiği, silindiği ve durumunun güncellendiği ana sayfa |
-| `AddBillScreen` | Yeni fatura ekleme sayfası |
-| `StatisticsScreen` | Aylık fatura grafikleri, ödeme durumu dağılımı ve en yüksek fatura analizi |
+| Sayfa                  | Görevi                                                                                              |
+|------------------------|---------------------------------------------------------------------------------------------------|
+| `LoginScreen`          | Kullanıcı adı ve şifre ile giriş yapılır                                                          |
+| `RegisterScreen`       | Yeni kullanıcı kayıt işlemleri yapılır                                                            |
+| `HomeScreen`           | Faturaların listelendiği, silindiği ve durumunun güncellendiği ana sayfa                           |
+| `AddBillScreen`        | Yeni fatura ekleme sayfası                                                                        |
+| `StatisticsScreen`     | Aylık fatura grafikleri, ödeme durumu dağılımı ve en yüksek fatura analizi                          |
+| `CalendarScreen`       | Faturaların takvim üzerinde tarih bazında gösterildiği sayfa. Seçilen tarihe ait faturalar listelenir |
+| `FilteredBillsScreen`  | Ödenen veya ödenmeyen faturaların filtrelenip listelendiği sayfa                                  |
+| `MonthBillsScreen`     | Belirli bir aya ait faturaların listelendiği sayfa                                                |
 
 ---
 
-## 🚀 Özellikler
+## 🚀 Projenin Öne Çıkan Özellikleri
 
-- 👤 Kullanıcı Kayıt ve Giriş Sistemi
-- 📌 Fatura Ekleme, Silme ve Düzenleme
-- ⏰ Ödeme Durumu Takibi (Ödendi / Bekliyor)
-- 📊 Aylık Harcama ve Durum İstatistikleri (grafiklerle)
-- 🔔 Yerel Bildirim Desteği (isteğe bağlı)
-- 📱 Mobil Uyumlu Modern Tasarım
-- 🗃️ Hive ile Lokal Veri Saklama
+- 👤 Kullanıcı Kayıt ve Giriş Sistemi (Hive tabanlı lokal yönetim)
+- 📌 Fatura Ekleme, Silme ve Ödeme Durumu Güncelleme
+- ⏰ Faturaların ödeme durumunu takip etme (Ödendi / Bekliyor)
+- 📅 Takvim görünümü ile faturaların tarih bazında takibi
+- 🔍 Ödeme durumuna göre fatura filtreleme ve görüntüleme
+- 📊 Aylık harcama ve ödeme durumu istatistikleri (grafiklerle)
+- 🔔 Yerel bildirim desteği ile ödeme hatırlatmaları
+- 📱 Modern, kullanıcı dostu ve mobil uyumlu tasarım
+- 🗃️ Hive ile offline veri saklama ve yönetim
 
 ---
+
+## 🚀 Yeni Eklenen Özellikler ve Sayfalar
+
+- 📅 **Takvim Görünümü (`CalendarScreen`):**  
+  Kullanıcılar faturalarını tarih bazında takvim üzerinde görebilir, seçilen güne ait faturaları detaylı listeleyebilir. Böylece tarih odaklı takip kolaylaşır.
+
+- 🔍 **Filtrelenmiş Fatura Listesi (`FilteredBillsScreen`):**  
+  Ödeme durumu bazında (Ödenen / Ödenmeyen) faturalar filtrelenip kullanıcıya gösterilir. Hızlı erişim ve durum takibi sağlar.
+
+- 🗓️ **Aylık Fatura Listesi (`MonthBillsScreen`):**  
+  Kullanıcı, grafiklerden veya diğer ekranlardan erişerek belirli bir ayın tüm faturalarını detaylı şekilde listeleyebilir.
+
+- 📊 **Grafik ve İstatistik İyileştirmeleri:**  
+  Ödeme durumuna göre pasta grafik ve aylık harcama bar grafiklerinde kullanıcı etkileşimi sağlanarak detaylı bilgilere ulaşım kolaylaştırıldı.
+
+---
+
+## 📱 Sayfa Açıklamaları
+
+1. **Giriş Ekranı (`LoginScreen`)**
+    - Kullanıcılar, kullanıcı adı ve şifre ile giriş yapabilir.
+    - Hatalı giriş durumunda kullanıcı bilgilendirilir.
+    - Başarılı giriş sonrası kullanıcı ana sayfaya yönlendirilir.
+    - "Kayıt Ol" sayfasına yönlendirme bağlantısı içerir.
+
+2. **Kayıt Ekranı (`RegisterScreen`)**
+    - Yeni kullanıcılar için kullanıcı adı ve şifre kayıt formu sağlar.
+    - Kullanıcı adı tekrar kontrolü yapar.
+    - Başarılı kayıt sonrası otomatik giriş yapılır ve ana sayfaya yönlendirilir.
+
+3. **Ana Sayfa (`HomeScreen`)**
+    - Kullanıcının fatura listesi gösterilir.
+    - Faturalar listelenir, silinebilir ve ödeme durumu değiştirilebilir.
+    - Menü üzerinden diğer sayfalara (istatistikler, takvim) erişim sağlar.
+    - Yeni fatura ekleme butonu bulunur.
+
+4. **Yeni Fatura Ekleme (`AddBillScreen`)**
+    - Fatura başlığı, tutar ve son ödeme tarihi girilir.
+    - Tarih seçiminde takvim widget kullanılır.
+    - Form validasyonu ile eksik ya da hatalı girişler engellenir.
+
+5. **İstatistikler Sayfası (`StatisticsScreen`)**
+    - Kullanıcının ödenen ve ödenmeyen faturaları pasta grafik ile gösterilir.
+    - Aylık harcama tutarları bar grafik şeklinde sunulur.
+    - Grafiklere dokunulduğunda detaylı fatura listesine erişim sağlanır.
+
+6. **Takvim Görünümü (`CalendarScreen`)**
+    - Faturalar tarih bazında takvimde işaretlenir.
+    - Seçilen güne ait faturalar alt listede detaylı gösterilir.
+
+7. **Filtrelenmiş Fatura Listesi (`FilteredBillsScreen`)**
+    - Ödeme durumuna göre (ödenen veya ödenmeyen) faturalar filtrelenip listelenir.
+    - Kullanıcı kolayca ödeme durumuna göre fatura görüntüleyebilir.
+
+8. **Aylık Fatura Listesi (`MonthBillsScreen`)**
+    - Belirli bir ayın tüm faturaları detaylı şekilde listelenir.
+    - Grafiklerden ya da diğer sayfalardan erişilebilir.
+
+---
+
 ## 🔐 Giriş Bilgileri Nasıl Saklanıyor?
 
 - Kullanıcı kayıt bilgileri Hive veritabanında (`users` kutusu) saklanmaktadır.
@@ -43,17 +107,26 @@ Bu Flutter uygulaması, kullanıcıların fatura takibini kolaylaştırmak ve za
 - Uygulamanın launcher ikonu ve splash ekranı özelleştirilmiştir.
 
 ---
+
 ### 🔐 Giriş Ekranı
 ![Login](assets/login.png)
 
 ### 🏠 Ana Sayfa
 ![Home](assets/home.png)
 
-### 📊 İstatistikler
-![Statistics](assets/statistic.png)
+### 🏠 Ana Sayfa
+![Home](assets/home2.png)
 
-### 📊 Fatura EKleme EKranı
+### 📊 İstatistikler
+![Statistics](assets/istatistik.png)
+
+### 📊 Fatura Ekleme Ekranı
 ![Add_Bill](assets/add_bill.png)
+
+### 📅 Takvim Ekranı
+![Calendar](assets/calendar.png)
+
+---
 
 ## 🛠️ Kurulum
 
@@ -81,18 +154,6 @@ Bu Flutter uygulaması, kullanıcıların fatura takibini kolaylaştırmak ve za
 2. Ana ekranda faturalarınızı ekleyin
 3. Ödeme durumunu tek tıkla güncelleyin
 4. Menüden "İstatistikler"e tıklayarak grafiklere ulaşın
-
----
-
-## 🧩 Kullanılan Teknolojiler
-
-- **Flutter**
-- **Provider** – State Management
-- **Hive** – Lokal Veri Tabanı
-- **Intl** – Tarih Formatlama
-- **fl_chart** – Grafik ve İstatistikler
-- **flutter_launcher_icons** – Uygulama İkonu
-- **flutter_local_notifications / awesome_notifications** – Bildirim sistemi
 
 ---
 
