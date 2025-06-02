@@ -163,3 +163,4 @@ Bu Flutter uygulaması, kullanıcıların fatura takibini kolaylaştırmak, fatu
 |--------------|------------------------------------------------------------------------------------------------------------------|
 | Handan İpek  | Proje fikri geliştirme, tüm sayfaların tasarımı ve kodlaması, login/kayıt sistemi, Hive veri yönetimi, grafik ekranı, kullanıcı kontrolü, splash/icon tasarımı, README oluşturma |
 | Betül Zeybek | Sayfa bağlantıları ve yönlendirmeler, drawer menü ve ikon ayarları, bildirim entegrasyonu, fatura ekleme/silme testleri, kullanıcı deneyimi geri bildirimleri |
+# fatura-hatirlatici
